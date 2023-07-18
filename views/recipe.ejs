@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Recipe: <%= recipe.title %></title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <h1><%= recipe.title %></h1>
+    <p>Created by: <%= user.username %></p>
+    <h2>Ingredients</h2>
+    <pre><%= recipe.ingredients %></pre>
+    <h2>Servings</h2>
+    <p><%= recipe.servings %></p>
+    <h2>Cooking Procedure</h2>
+    <pre><%= recipe.cooking_procedure %></pre>
+    <h2>Serving Procedure</h2>
+    <pre><%= recipe.serving_procedure %></pre>
+    <h2>Description</h2>
+    <p><%= recipe.description %></p>
+    <h2>Ratings</h2>
+    <ul>
+      <% ratings.forEach(rating => { %>
+      <li><%= rating.rating %></li>
+      <% }) %>
+    </ul>
+    <h2>Comments</h2>
+    <ul>
+      <% comments.forEach(comment => { %>
+      <li><%= comment.comment %></li>
+      <% }) %>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,205 @@
+<!-- newrecipe.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= recipeId ? 'Edit Recipe' : 'Add New Recipe' %></title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <!-- Replace with the path to your custom CSS file -->
+  <style>
+    /* Add your custom styles here */
+  </style>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Add Ingredient
+      let ingredientIndex = 2;
+      $("#add-ingredient").click(function () {
+        const ingredientContainer = $("<div>").addClass("ingredient-container");
+
+        const ingredientInput = $("<input>").attr({
+          type: "text",
+          name: `ingredient_name[]`,
+          class: "form-control",
+          placeholder: `${ingredientIndex}. Enter the next ingredient and its quantity`,
+        });
+        ingredientContainer.append(ingredientInput);
+        $("#ingredients-group").append(ingredientContainer);
+
+        ingredientIndex++;
+      });
+
+      // Add Procedure
+      let procedureIndex = 2;
+      $("#add-procedure").click(function () {
+        const procedureContainer = $("<div>").addClass("procedure-container");
+
+        const descriptionTextarea = $("<textarea>").attr({
+          name: `procedure_description[]`,
+          class: "form-control",
+          placeholder: `${procedureIndex}. Enter the next procedure`,
+        });
+
+        procedureContainer.append(descriptionTextarea);
+        $("#procedures-group").append(procedureContainer);
+
+        procedureIndex++;
+      });
+    });
+  </script>
+</head>
+<body>
+<header>
+  <a href="/index" class="logo" title="Home Page"><h1>TUPIKE</h1></a>
+  <div class="bx bx-menu" id="menu-icon"></div>
+  <ul class="navbar">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Favorites</a></li>
+    <li><a href="#">Profile</a></li>
+    <li><a href="/logout">Logout</a></li>
+  </ul>
+
+  <div class="user-details">
+    <img src="/images/user.png" alt="User Avatar" />
+    <% if (firstName) { %>
+    <span><%= firstName %></span>
+    <% } else { %>
+    <span> ____</span>
+    <% } %>
+  </div>
+</header>
+<div class="container">
+  <div class="text-center mt-4">
+    <h1><%= recipeId ? 'Edit Recipe' : 'Add New Recipe' %></h1>
+    <p>Please fill in the details below to <%= recipeId ? 'edit the recipe' : 'add a new recipe' %></p>
+  </div>
+
+  <form action="<%= recipeId ? `/saverecipe/${recipeId}` : '/newrecipes' %>" method="POST" enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label for="title">Title:</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        class="form-control"
+        placeholder="Enter the recipe's title"
+        value="<%= recipe && recipe.title ? recipe.title : '' %>"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="image">Image (optional):</label>
+      <% if (recipe && recipe.image_filename) { %>
+        <div>
+          <img src="/images/<%= recipe.image_filename %>" alt="Recipe Image" class="img-thumbnail">
+        </div>
+      <% } %>
+      <input type="file" id="image" name="image" class="form-control" accept="image/*">
+    </div>
+    
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea
+        id="description"
+        name="description"
+        class="form-control"
+        placeholder="Enter a brief description of the recipe"
+        required
+      ><%= recipe && recipe.description ? recipe.description : '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="servings">Servings:</label>
+      <input
+        type="number"
+        id="servings"
+        name="servings"
+        class="form-control"
+        placeholder="Enter the number of servings"
+        value="<%= recipe && recipe.servings ? recipe.servings : '' %>"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="ingredients">Ingredients:</label>
+      <div id="ingredients-group">
+        <% if (recipe && recipe.ingredients && recipe.ingredients.length > 0) { %>
+          <% recipe.ingredients.forEach(function (ingredient, index) { %>
+            <div class="ingredient-container">
+              <input
+                type="text"
+                name="ingredient_name[]"
+                class="form-control"
+                placeholder="<%= `${index + 1}. Enter an ingredient and its quantity` %>"
+                value="<%= ingredient.name %>"
+              />
+            </div>
+          <% }); %>
+        <% } else { %>
+          <div class="ingredient-container">
+            <input
+              type="text"
+              name="ingredient_name[]"
+              class="form-control"
+              placeholder="1. Enter an ingredient and its quantity"
+            />
+          </div>
+        <% } %>
+      </div>
+      <button type="button" id="add-ingredient" class="btn btn-primary">Add An Ingredient</button>
+    </div>
+
+    <div class="form-group">
+      <label for="procedures">Procedure:</label>
+      <div id="procedures-group">
+        <% if (recipe && recipe.cooking_procedures && recipe.cooking_procedures.length > 0) { %>
+          <% recipe.cooking_procedures.forEach(function (procedure, index) { %>
+            <div class="procedure-container">
+              <textarea
+                type="text"
+                name="procedure_description[]"
+                class="form-control"
+                placeholder="<%= `Enter a procedure` %>"
+              ><%= procedure.description %></textarea>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <div class="procedure-container">
+            <textarea
+              type="text"
+              name="procedure_description[]"
+              class="form-control"
+              placeholder="1. Enter a procedure"
+            ></textarea>
+          </div>
+        <% } %>
+      </div>
+      <button type="button" id="add-procedure" class="btn btn-primary">Add A Procedure</button>
+    </div>
+
+    <div class="form-group text-center">
+      <button type="submit" class="btn btn-primary">
+        <%= recipeId ? 'Save Changes' : 'Add Recipe' %>
+      </button>
+      <% if (recipeId) { %>
+        <input type="hidden" name="recipeId" value="<%= recipeId %>" />
+      <% } %>
+    </div>
+  </form>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  // Add your custom JavaScript code here
+</script>
+</body>
+</html>

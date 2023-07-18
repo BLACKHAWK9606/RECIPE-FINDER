@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tupike</title>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    
+    <script type="text/javascript" src="/public/script.js"></script>
+  </head>
+  <body>
+    <header>
+      <a href="/index" class="logo"><h1>TUPIKE</h1></a>
+      <div class="bx bx-menu" id="menu-icon"></div>
+      <ul class="navbar">
+        <li><a href="#">Home</a></li>
+        <li><a href="#myrecipes">My Recipes</a></li>
+        <li><a href="#">Favorites</a></li>
+        <li><a href="#">Profile</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+
+      <div class="user-details">
+        <img src="/images/user.png" alt="User Avatar" />
+        <% if (firstName) { %>
+        <span>Hello, <%= firstName %></span>
+        <% } else { %>
+        <span>Hello, _</span>
+        <% } %>
+      </div>
+    </header>
+
+    <div class="add">
+      <div class="add-content">
+        <h2>
+          <a href="/newrecipe" class="btn btn-primary">Add A Recipe</a>
+        </h2>
+      </div>
+    </div>
+
+    <!--Featured recipes section-->
+    <section class="recipes" id="recipes">
+      <div class="title">
+        <h2>Featured Recipes</h2>
+      </div>
+
+      <div class="recipes-content">
+        <% 
+        // Shuffle the allRecipes array randomly
+        allRecipes.sort(() => Math.random() - 0.5);
+        
+        allRecipes.forEach((recipe) => { %>
+          <div class="col-content recipe-button" data-recipe-title="<%= recipe.title %>" data-recipe-image="/images/<%= recipe.image_filename %>" data-recipe-description="<%= recipe.description %>" data-recipe-servings="<%= recipe.servings %>" data-recipe-ingredients="<%= JSON.stringify(recipe.ingredients) %>" data-recipe-procedures="<%= JSON.stringify(recipe.cooking_procedures) %>">
+            <img src="/images/<%= recipe.image_filename %>" alt="<%= recipe.title %>" />
+            <h1><%= recipe.title %></h1>
+            <br>
+            <h4><%= recipe.description %></h4>
+          </div>
+        <% }); %>
+      </div>
+      
+      
+    </section>
+
+    <!--My recipes section--->
+    <section class="recipes" id="myrecipes">
+      <div class="title">
+        <h2>Your Recipes</h2>
+      </div>
+
+      <div class="add">
+        <div class="add-content">
+          <h2>
+            <a href="/newrecipe" class="btn btn-primary">Add A Recipe</a>
+          </h2>
+        </div>
+      </div>
+
+      <div class="recipes-content">
+        <% 
+        // Sort the userRecipes array based on the created_at timestamp in descending order
+        userRecipes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).reverse();
+        
+        userRecipes.forEach((recipe) => { %>
+          <div class="col-content recipe-button" data-recipe-title="<%= recipe.title %>" data-recipe-image="/images/<%= recipe.image_filename %>" data-recipe-description="<%= recipe.description %>" data-recipe-servings="<%= recipe.servings %>" data-recipe-ingredients="<%= JSON.stringify(recipe.ingredients) %>" data-recipe-procedures="<%= JSON.stringify(recipe.cooking_procedures) %>">
+            <img src="/images/<%= recipe.image_filename %>" alt="<%= recipe.title %>" />
+            <h1><%= recipe.title %></h1>
+            <br>
+            <h4><%= recipe.description %></h4>
+          </div>
+        <% }); %>
+      </div>
+      
+      
+      
+      
+    </section>
+
+    <footer class="footer mt-5">
+      <p>&copy; 2023 Recipe App. All rights reserved.</p>
+    </footer>
+
+  </body>
+</html>

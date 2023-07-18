@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tupike - Confirmation</title>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <a href="/index" class="logo"><h1>TUPIKE</h1></a>
+      <div class="bx bx-menu" id="menu-icon"></div>
+      <ul class="navbar">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Favorites</a></li>
+        <li><a href="#">Profile</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+
+      <div class="user-details">
+        <img src="/images/user.png" alt="User Avatar" />
+        <% if (firstName) { %>
+        <span>Hello, <%= firstName %></span>
+        <% } else { %>
+        <span>Hello, _</span>
+        <% } %>
+      </div>
+    </header>
+
+    <!--destination section--->
+    <section class="recipes" id="recipes">
+      <div class="title">
+        <h2>Confirm Recipe Details</h2>
+      </div>
+
+      <div class="recipes-content">
+        <div class="col-content">
+          <h2>Title Of The Recipe</h2>
+          <h3><%= recipe.title %></h3>
+        </div>
+
+        <div class="col-content">
+          <h2>Recipe's Image</h2>
+          <div class="recipe-image">
+            <img src="<%= imagePath %>" alt="Recipe Image" />
+          </div>
+        </div>
+
+        <div class="col-content">
+          <h2>Number Of Servings</h2>
+          <h3><%= recipe.servings %></h3>
+        </div>
+
+        <div class="col-content">
+          <h2>Description</h2>
+          <ol><%= recipe.description %></ol>
+        </div>
+
+        <div class="col-content">
+          <h2>Ingredients</h2>
+          <ul>
+            <% for (let i = 0; i < recipe.ingredients.length; i++) { %>
+            <li>
+              <%= recipe.ingredients[i].name %>
+            </li>
+            <% } %>
+          </ul>
+        </div>
+
+        <div class="col-content">
+          <h2>Cooking Procedure</h2>
+          <ol>
+            <% for (let i = 0; i < recipe.cooking_procedures.length; i++) {
+            %>
+            <li><%= recipe.cooking_procedures[i].description %></li>
+            <% } %>
+            </ol>
+        </div>
+      </div>
+    </section>
+
+    <div class="add">
+      <div class="add-content">
+        <% if (recipe && recipe.id) { %>
+          <h2>
+            <a href="/editrecipe/<%= recipe.id %>" class="btn btn-primary">Edit This Recipe</a>
+          </h2>                    
+        <% } %>
+      </div>
+      <div class="add-content">
+        <h2>
+          <a href="/newrecipe" class="btn btn-primary">Add Another Recipe</a>
+        </h2>
+      </div>
+      <div class="add-content">
+        <h2>
+          <a href="/index" class="btn btn-primary">Done</a>
+        </h2>
+      </div>
+    </div>
+
+    <footer class="footer mt-5">
+      <p>&copy; 2023 Recipe App. All rights reserved.</p>
+    </footer>
+
+    <script type="text/javascript" src="/public/script.js"></script>
+  </body>
+</html>
