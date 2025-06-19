@@ -1,33 +1,369 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Recipe: <%= recipe.title %></title>
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
-  <body>
-    <h1><%= recipe.title %></h1>
-    <p>Created by: <%= user.username %></p>
-    <h2>Ingredients</h2>
-    <pre><%= recipe.ingredients %></pre>
-    <h2>Servings</h2>
-    <p><%= recipe.servings %></p>
-    <h2>Cooking Procedure</h2>
-    <pre><%= recipe.cooking_procedure %></pre>
-    <h2>Serving Procedure</h2>
-    <pre><%= recipe.serving_procedure %></pre>
-    <h2>Description</h2>
-    <p><%= recipe.description %></p>
-    <h2>Ratings</h2>
-    <ul>
-      <% ratings.forEach(rating => { %>
-      <li><%= rating.rating %></li>
-      <% }) %>
-    </ul>
-    <h2>Comments</h2>
-    <ul>
-      <% comments.forEach(comment => { %>
-      <li><%= comment.comment %></li>
-      <% }) %>
-    </ul>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe: <%= recipe.title %> | Tupike Recipe Sharing</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3a6ea5;
+      --secondary: #ff6b6b;
+      --dark: #2f3542;
+      --light: #f5f6fa;
+      --gray: #747d8c;
+      --success: #20bf6b;
+    }
+    
+    body {
+      background-color: #f0f2f5;
+      color: var(--dark);
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    
+    .navbar-custom {
+      background-color: #ffffff;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      padding: 0.8rem 2rem;
+    }
+    
+    .navbar-brand {
+      color: var(--primary) !important;
+      font-weight: 700;
+      font-size: 1.6rem;
+      letter-spacing: -0.5px;
+    }
+    
+    .nav-link {
+      color: var(--dark) !important;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+    
+    .nav-link:hover {
+      color: var(--primary) !important;
+      background-color: rgba(58, 110, 165, 0.1);
+    }
+    
+    .nav-link i {
+      margin-right: 6px;
+      font-size: 1.1rem;
+    }
+    
+    .recipe-container {
+      background-color: #ffffff;
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem auto;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      max-width: 900px;
+    }
+    
+    .recipe-header {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .recipe-title {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .recipe-author {
+      color: var(--gray);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .recipe-author i {
+      margin-right: 5px;
+      color: var(--primary);
+    }
+    
+    .recipe-image {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .recipe-section {
+      margin-bottom: 2rem;
+    }
+    
+    .section-title {
+      color: var(--dark);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 3px;
+      background: var(--primary);
+      bottom: 0;
+      left: 0;
+      border-radius: 10px;
+    }
+    
+    .ingredients-list {
+      background-color: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.8;
+    }
+    
+    .procedure-text {
+      white-space: pre-wrap;
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.8;
+    }
+    
+    .ratings-section, .comments-section {
+      background-color: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+    
+    .rating-item, .comment-item {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    
+    .rating-stars {
+      color: #ffc107;
+      font-size: 1.2rem;
+    }
+    
+    .footer {
+      background-color: #ffffff;
+      color: var(--dark);
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 3rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .btn-action {
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-action i {
+      margin-right: 8px;
+    }
+    
+    .btn-favorite {
+      background-color: white;
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+    }
+    
+    .btn-favorite:hover, .btn-favorite.active {
+      background-color: var(--secondary);
+      color: white;
+    }
+    
+    .btn-back {
+      background-color: var(--light);
+      color: var(--dark);
+      border: none;
+    }
+    
+    .btn-back:hover {
+      background-color: #e6e9ef;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/index">TUPIKE</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/index#myfavorites">
+              <i class="fas fa-heart"></i>Favorites
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/index#myrecipes">
+              <i class="fas fa-book"></i>My Recipes
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/newrecipe">
+              <i class="fas fa-plus-circle"></i>Add Recipe
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/search">
+              <i class="fas fa-search"></i>Search
+            </a>
+          </li>
+        </ul>
+        <form class="form-inline mr-3" action="/search" method="GET">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search recipes..." name="query" style="border-radius: 20px 0 0 20px;">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit" style="border-radius: 0 20px 20px 0; background-color: var(--primary); border-color: var(--primary);">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="recipe-container">
+      <div class="recipe-header">
+        <h1 class="recipe-title"><%= recipe.title %></h1>
+        <p class="recipe-author">
+          <i class="fas fa-user"></i> Created by: <%= user.username %>
+        </p>
+        
+        <div class="action-buttons">
+          <button class="btn btn-action btn-back" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <button class="btn btn-action btn-favorite">
+            <i class="fas fa-heart"></i> Add to Favorites
+          </button>
+        </div>
+      </div>
+      
+      <% if (recipe.image_filename) { %>
+        <img src="/images/<%= recipe.image_filename %>" alt="<%= recipe.title %>" class="recipe-image">
+      <% } %>
+      
+      <div class="recipe-section">
+        <h2 class="section-title">Description</h2>
+        <p><%= recipe.description %></p>
+      </div>
+      
+      <div class="recipe-section">
+        <h2 class="section-title">Servings</h2>
+        <p><%= recipe.servings %> people</p>
+      </div>
+      
+      <div class="recipe-section">
+        <h2 class="section-title">Ingredients</h2>
+        <div class="ingredients-list"><%= recipe.ingredients %></div>
+      </div>
+      
+      <div class="recipe-section">
+        <h2 class="section-title">Cooking Procedure</h2>
+        <div class="procedure-text"><%= recipe.cooking_procedure %></div>
+      </div>
+      
+      <div class="recipe-section">
+        <h2 class="section-title">Serving Procedure</h2>
+        <div class="procedure-text"><%= recipe.serving_procedure %></div>
+      </div>
+      
+      <div class="recipe-section">
+        <h2 class="section-title">Ratings</h2>
+        <% if (ratings && ratings.length > 0) { %>
+          <div class="ratings-section">
+            <% ratings.forEach(rating => { %>
+              <div class="rating-item">
+                <div class="rating-stars">
+                  <% for (let i = 0; i < rating.rating; i++) { %>
+                    <i class="fas fa-star"></i>
+                  <% } %>
+                  <% for (let i = rating.rating; i < 5; i++) { %>
+                    <i class="far fa-star"></i>
+                  <% } %>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p>No ratings yet. Be the first to rate this recipe!</p>
+        <% } %>
+      </div>
+      
+      <div class="recipe-section">
+        <h2 class="section-title">Comments</h2>
+        <% if (comments && comments.length > 0) { %>
+          <div class="comments-section">
+            <% comments.forEach(comment => { %>
+              <div class="comment-item">
+                <p><%= comment.comment %></p>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p>No comments yet. Be the first to comment on this recipe!</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 Tupike Recipe Sharing. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Toggle favorite button
+    document.querySelector('.btn-favorite').addEventListener('click', function() {
+      this.classList.toggle('active');
+      const isActive = this.classList.contains('active');
+      
+      if (isActive) {
+        this.innerHTML = '<i class="fas fa-heart"></i> Added to Favorites';
+      } else {
+        this.innerHTML = '<i class="fas fa-heart"></i> Add to Favorites';
+      }
+      
+      // Here you would add code to send the favorite status to the server
+    });
+  </script>
+</body>
 </html>

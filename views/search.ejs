@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tupike | Search Results</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3a6ea5;
+      --secondary: #ff6b6b;
+      --dark: #2f3542;
+      --light: #f5f6fa;
+      --gray: #747d8c;
+      --success: #20bf6b;
+    }
+    
+    body {
+      background-color: #f0f2f5;
+      color: var(--dark);
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    
+    .navbar-custom {
+      background-color: #ffffff;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      padding: 0.8rem 2rem;
+    }
+    
+    .navbar-brand {
+      color: var(--primary) !important;
+      font-weight: 700;
+      font-size: 1.6rem;
+      letter-spacing: -0.5px;
+    }
+    
+    .nav-link {
+      color: var(--dark) !important;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+    
+    .nav-link:hover {
+      color: var(--primary) !important;
+      background-color: rgba(58, 110, 165, 0.1);
+    }
+    
+    .nav-link i {
+      margin-right: 6px;
+      font-size: 1.1rem;
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+    }
+    
+    .user-profile img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      margin-right: 10px;
+      border: 2px solid var(--primary);
+      object-fit: cover;
+    }
+    
+    .user-greeting {
+      color: var(--dark);
+      text-decoration: none !important;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .container {
+      margin-top: 2rem;
+      max-width: 1200px;
+    }
+    
+    .search-section {
+      background-color: #ffffff;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .search-form {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .search-input {
+      flex: 1;
+      border-radius: 30px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(58, 110, 165, 0.15);
+    }
+    
+    .btn-search {
+      background: linear-gradient(135deg, var(--primary) 0%, #4a89dc 100%);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+    }
+    
+    .btn-search:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-search i {
+      margin-right: 8px;
+    }
+    
+    .filter-tabs {
+      display: flex;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      white-space: nowrap;
+    }
+    
+    .filter-tab {
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-right: 0.5rem;
+      text-decoration: none;
+    }
+    
+    .filter-tab.active {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .filter-tab:not(.active) {
+      background-color: #f0f2f5;
+      color: var(--dark);
+    }
+    
+    .filter-tab:hover:not(.active) {
+      background-color: #e6e9ef;
+    }
+    
+    .results-count {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+    
+    .recipes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .recipe-card {
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .recipe-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .recipe-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    
+    .recipe-content {
+      padding: 1.3rem;
+    }
+    
+    .recipe-title {
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .recipe-author {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .recipe-author i {
+      margin-right: 5px;
+      font-size: 0.85rem;
+    }
+    
+    .like-icon {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      font-size: 1.3rem;
+      color: #ddd;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .like-icon.liked {
+      color: var(--secondary);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--gray);
+      opacity: 0.3;
+    }
+    
+    .empty-state h3 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+    
+    .empty-state p {
+      color: var(--gray);
+      max-width: 500px;
+      margin: 0 auto 1.5rem;
+    }
+    
+    .footer {
+      background-color: #ffffff;
+      color: var(--dark);
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 3rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/index">TUPIKE</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/index#myfavorites">
+              <i class="fas fa-heart"></i>Favorites
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/index#myrecipes">
+              <i class="fas fa-book"></i>My Recipes
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/newrecipe">
+              <i class="fas fa-plus-circle"></i>Add Recipe
+            </a>
+          </li>
+        </ul>
+        <div class="user-profile">
+          <img src="/images/user.png" alt="User Avatar">
+          <% if (firstName !== "Guest") { %>
+            <a href="/profile" class="user-greeting mr-3">Hello, <%= firstName %></a>
+          <% } else { %>
+            <span class="mr-3">Hello, Guest</span>
+          <% } %>
+          <a class="nav-link logout-link" href="/logout">
+            <i class="fas fa-sign-out-alt"></i>Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="search-section">
+      <form action="/search" method="GET" class="search-form">
+        <input type="text" name="query" class="search-input" placeholder="Search recipes by title, description or username..." value="<%= searchQuery %>">
+        <button type="submit" class="btn-search">
+          <i class="fas fa-search"></i>Search
+        </button>
+      </form>
+      
+      <div class="filter-tabs">
+        <a href="/search<%= searchQuery ? `?query=${searchQuery}` : '' %>" class="filter-tab <%= activeFilter === 'all' ? 'active' : '' %>">
+          <i class="fas fa-th-list"></i> All Recipes
+        </a>
+        <a href="/search?filter=my-recipes<%= searchQuery ? `&query=${searchQuery}` : '' %>" class="filter-tab <%= activeFilter === 'my-recipes' ? 'active' : '' %>">
+          <i class="fas fa-user-edit"></i> My Recipes
+        </a>
+        <a href="/search?filter=favorites<%= searchQuery ? `&query=${searchQuery}` : '' %>" class="filter-tab <%= activeFilter === 'favorites' ? 'active' : '' %>">
+          <i class="fas fa-heart"></i> Favorites
+        </a>
+      </div>
+      
+      <div class="results-count">
+        <% if (searchQuery) { %>
+          Found <%= recipes.length %> results for "<%= searchQuery %>"
+        <% } else { %>
+          Showing <%= recipes.length %> recipes
+        <% } %>
+      </div>
+      
+      <% if (recipes.length > 0) { %>
+        <div class="recipes-grid">
+          <% recipes.forEach(recipe => { %>
+            <div class="recipe-card">
+              <% if (recipe.image_filename) { %>
+                <img
+                  src="/images/<%= recipe.image_filename %>"
+                  alt="<%= recipe.title %>"
+                  class="recipe-image"
+                >
+              <% } else { %>
+                <div class="recipe-image" style="background-color: #eee; display: flex; align-items: center; justify-content: center;">
+                  <i class="fas fa-utensils" style="font-size: 2rem; color: #ccc;"></i>
+                </div>
+              <% } %>
+              <div class="recipe-content">
+                <h3 class="recipe-title"><%= recipe.title %></h3>
+                <p class="recipe-author">
+                  <i class="fas fa-user"></i> <%= recipe.username || "Unknown" %>
+                </p>
+                <p class="recipe-description" style="font-size: 0.85rem; color: #666; margin-bottom: 2rem;">
+                  <%= recipe.description.length > 60 ? recipe.description.substring(0, 60) + '...' : recipe.description %>
+                </p>
+              </div>
+              <i class="fas fa-heart like-icon <%= recipe.is_favorited ? 'liked' : '' %>" data-recipe-id="<%= recipe.id %>"></i>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <i class="fas fa-search"></i>
+          <h3>No recipes found</h3>
+          <p>
+            <% if (searchQuery) { %>
+              We couldn't find any recipes matching "<%= searchQuery %>". Try different keywords or browse all recipes.
+            <% } else if (activeFilter === 'my-recipes') { %>
+              You haven't created any recipes yet. Add your first recipe!
+            <% } else if (activeFilter === 'favorites') { %>
+              You don't have any favorite recipes yet. Browse recipes and add them to your favorites.
+            <% } else { %>
+              There are no recipes available at the moment.
+            <% } %>
+          </p>
+          <a href="/newrecipe" class="btn-search">
+            <i class="fas fa-plus-circle"></i>Add New Recipe
+          </a>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 Tupike Recipe Sharing. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Handle like functionality with server request
+    document.querySelectorAll('.like-icon').forEach(icon => {
+      icon.addEventListener('click', (evt) => {
+        evt.stopPropagation();
+        
+        const recipeId = icon.getAttribute('data-recipe-id');
+        
+        // Toggle the visual state immediately for responsive feel
+        icon.classList.toggle('liked');
+        
+        // Send request to server to update favorite status
+        fetch('/favorite', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ recipeId })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (!data.success) {
+            // Revert the toggle if the server request failed
+            icon.classList.toggle('liked');
+          }
+        })
+        .catch(error => {
+          console.error('Error updating favorite status:', error);
+          // Revert the toggle on error
+          icon.classList.toggle('liked');
+        });
+      });
+    });
+    
+    // Make recipe cards clickable to view details
+    document.querySelectorAll('.recipe-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        // Prevent navigation if clicking on the like icon
+        if (e.target.classList.contains('like-icon') || e.target.closest('.like-icon')) {
+          return;
+        }
+        
+        const recipeId = card.querySelector('.like-icon').getAttribute('data-recipe-id');
+        window.location.href = `/recipe/${recipeId}`;
+      });
+    });
+  </script>
+</body>
+</html> 

@@ -3,86 +3,274 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registration</title>
+  <title>Register | Tupike Recipe Sharing</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="styles.css"> <!-- Replace with the path to your custom CSS file -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
-    /* Add your custom styles here */
+    body.tupike-login-page {
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    
+    .tupike-login .login-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .tupike-login .brand-header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .tupike-login .brand-header h1 {
+      font-size: 1.75rem;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .tupike-login .brand-header p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .tupike-login .form-group label {
+      font-weight: 500;
+      color: #495057;
+      font-size: 0.9rem;
+    }
+
+    .tupike-login .form-control {
+      border-radius: 5px;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ced4da;
+    }
+
+    .tupike-login .form-control:focus {
+      box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
+      border-color: #2c3e50;
+    }
+
+    .tupike-login .btn-primary {
+      background-color: #2c3e50;
+      border: none;
+      padding: 0.75rem 2rem;
+      width: 100%;
+      font-weight: 500;
+      margin-top: 1rem;
+    }
+
+    .tupike-login .btn-primary:hover {
+      background-color: #34495e;
+    }
+
+    .tupike-login .success-message {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+    }
+
+    .tupike-login .links-section {
+      text-align: center;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+      margin-top: 2rem;
+    }
+
+    .tupike-login .links-section a {
+      color: #2c3e50;
+      text-decoration: none;
+    }
+
+    .tupike-login .links-section a:hover {
+      text-decoration: underline;
+    }
+
+    .tupike-login .features-section {
+      background-color: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 5px;
+      margin-top: 2rem;
+    }
+
+    .tupike-login .features-section h5 {
+      color: #2c3e50;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .tupike-login .features-section ul {
+      padding-left: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    .tupike-login .features-section li {
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .tupike-login .support-section {
+      text-align: center;
+      margin-top: 2rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .tupike-login .registration-notice {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background-color: #e8f4fd;
+      border-radius: 5px;
+      color: #2c3e50;
+    }
+
+    .tupike-login .registration-notice h3 {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .tupike-login .form-row {
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+    }
+
+    .tupike-login .form-row > div {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
   </style>
 </head>
-<body>
-  <div class="container">
-    <div class="text-center mt-4">
-      <h1>Welcome to Tupike Recipe Sharing App</h1>
-      <p>Create an account to get started.</p>
-    </div>
-    
-    <% if (successMessage) { %>
-      <div class="success-message">
-        <%= successMessage %>
-      </div>
-    <% } %>
-    
-    <form action="/register" method="POST">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
-      </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
-      </div>
-      <div class="form-group">
-        <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name" required>
-      </div>
-      <div class="form-group">
-        <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Last Name" required>
-      </div>
-      <div class="form-group">
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country" class="form-control" placeholder="Country" required>
-      </div>
-      <div class="form-group">
-        <label for="phone_number">Phone Number:</label>
-        <input type="tel" id="phone_number" name="phone_number" class="form-control" placeholder="Phone Number" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-      </div>
-      <button type="submit" class="btn btn-primary"`>Register</button>
-    </form>
-  
-    <div class="mt-4">
-      <p class="text-center">Already have an account? <a href="/login">Login</a></p>
-      <p class="text-center">Forgot your password? <a href="/forgot-password">Reset Password</a></p>
-    </div>
+<body class="tupike-login-page">
+  <div class="tupike-login">
+    <div class="container">
+      <div class="login-container">
+        <div class="brand-header">
+          <h1>Welcome to Tupike</h1>
+          <p>Create your account to start sharing recipes</p>
+        </div>
+        
+        <% if (successMessage) { %>
+          <div class="success-message">
+            <%= successMessage %>
+          </div>
+        <% } %>
+        
+        <form action="/register" method="POST">
+          <div class="form-row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="first_name">First Name</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                  </div>
+                  <input type="text" id="first_name" name="first_name" class="form-control" required placeholder="Enter your first name">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                  </div>
+                  <input type="text" id="last_name" name="last_name" class="form-control" required placeholder="Enter your last name">
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <div>
-      <h3>
-        After successful registration, you will be redirected to the login page to log in and access the app!
-      </h3>
-    </div>
-    <!-- Additional Features and Data -->
-    <div class="mt-4">
-      <h5>Benefits of Creating an Account:</h5>
-      <ul>
-        <li>Access exclusive recipes</li>
-        <li>Save your favorite recipes</li>
-        <li>Share your own recipes with the community</li>
-      </ul>
-    </div>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-at"></i></span>
+              </div>
+              <input type="text" id="username" name="username" class="form-control" required placeholder="Choose a username">
+            </div>
+          </div>
 
-    <div class="mt-4">
-      <h5>Contact Support:</h5>
-      <p>If you're experiencing any issues with your account or need assistance, please contact our support team at support@example.com</p>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+              </div>
+              <input type="email" id="email" name="email" class="form-control" required placeholder="Enter your email">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="country">Country</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                  </div>
+                  <input type="text" id="country" name="country" class="form-control" required placeholder="Enter your country">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="phone_number">Phone Number</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                  </div>
+                  <input type="tel" id="phone_number" name="phone_number" class="form-control" required placeholder="Enter your phone number">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+              </div>
+              <input type="password" id="password" name="password" class="form-control" required placeholder="Choose a password">
+            </div>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">Create Account</button>
+        </form>
+
+        <div class="registration-notice">
+          <h3>After registration, you'll be redirected to login and start exploring!</h3>
+        </div>
+
+        <div class="links-section">
+          <p>Already have an account? <a href="/login">Sign In</a></p>
+        </div>
+
+        <div class="features-section">
+          <h5><i class="fas fa-star mr-2"></i>Member Benefits</h5>
+          <ul>
+            <li>Access exclusive recipes</li>
+            <li>Save your favorite recipes</li>
+            <li>Share your own recipes with the community</li>
+          </ul>
+        </div>
+
+        <div class="support-section">
+          <p>Need help? Contact us at <a href="mailto:support@example.com">support@example.com</a></p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <!-- Add your custom JavaScript code here if needed -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

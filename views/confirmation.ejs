@@ -1,118 +1,419 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tupike - Confirmation</title>
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <header>
-      <a href="/index" class="logo"><h1>TUPIKE</h1></a>
-      <div class="bx bx-menu" id="menu-icon"></div>
-      <ul class="navbar">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Favorites</a></li>
-        <li><a href="#">Profile</a></li>
-        <li><a href="/logout">Logout</a></li>
-      </ul>
-
-      <div class="user-details">
-        <img src="/images/user.png" alt="User Avatar" />
-        <% if (firstName) { %>
-        <span>Hello, <%= firstName %></span>
-        <% } else { %>
-        <span>Hello, _</span>
-        <% } %>
-      </div>
-    </header>
-
-    <!--destination section--->
-    <section class="recipes" id="recipes">
-      <div class="title">
-        <h2>Confirm Recipe Details</h2>
-      </div>
-
-      <div class="recipes-content">
-        <div class="col-content">
-          <h2>Title Of The Recipe</h2>
-          <h3><%= recipe.title %></h3>
-        </div>
-
-        <div class="col-content">
-          <h2>Recipe's Image</h2>
-          <div class="recipe-image">
-            <img src="<%= imagePath %>" alt="Recipe Image" />
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tupike | Recipe Confirmation</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3a6ea5;
+      --secondary: #ff6b6b;
+      --dark: #2f3542;
+      --light: #f5f6fa;
+      --gray: #747d8c;
+      --success: #20bf6b;
+    }
+    
+    body {
+      background-color: #f0f2f5;
+      color: var(--dark);
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+    }
+    
+    .navbar-custom {
+      background-color: #ffffff;
+      padding: 0.8rem 2rem;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    }
+    
+    .navbar-brand {
+      color: var(--primary) !important;
+      font-weight: 700;
+      font-size: 1.6rem;
+      letter-spacing: -0.5px;
+    }
+    
+    .nav-link {
+      color: var(--dark) !important;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+    
+    .nav-link:hover {
+      color: var(--primary) !important;
+      background-color: rgba(58, 110, 165, 0.1);
+    }
+    
+    .nav-link i {
+      margin-right: 6px;
+      font-size: 1.1rem;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin-top: 2rem;
+    }
+    
+    .confirmation-card {
+      background-color: #ffffff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+      margin-bottom: 2rem;
+    }
+    
+    .confirmation-header {
+      background: linear-gradient(135deg, var(--primary) 0%, #4a89dc 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+    }
+    
+    .status-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+      background-color: rgba(255, 255, 255, 0.2);
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
+      border-radius: 50%;
+    }
+    
+    .confirmation-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 1.75rem;
+    }
+    
+    .confirmation-subtitle {
+      opacity: 0.9;
+      font-size: 0.95rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .recipe-details {
+      padding: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    
+    .recipe-text {
+      flex: 1;
+      min-width: 300px;
+    }
+    
+    .recipe-image-container {
+      flex: 0 0 300px;
+    }
+    
+    .recipe-image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .detail-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .detail-heading {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(58, 110, 165, 0.1);
+      padding-bottom: 0.5rem;
+    }
+    
+    .recipe-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .ingredient-list {
+      padding-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .ingredient-list li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .procedure-list {
+      padding-left: 0;
+      counter-reset: step-counter;
+      list-style-type: none;
+    }
+    
+    .procedure-list li {
+      margin-bottom: 1rem;
+      padding-left: 2.5rem;
+      position: relative;
+    }
+    
+    .procedure-list li:before {
+      content: counter(step-counter);
+      counter-increment: step-counter;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 28px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    
+    .actions-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      padding: 1.5rem;
+      background-color: #f8f9fa;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-action {
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-action i {
+      margin-right: 8px;
+    }
+    
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn-save {
+      background: linear-gradient(135deg, var(--success) 0%, #4cd67b 100%);
+      color: white;
+      border: none;
+    }
+    
+    .btn-save:hover {
+      color: white;
+    }
+    
+    .btn-edit {
+      background-color: #f39c12;
+      color: white;
+      border: none;
+    }
+    
+    .btn-edit:hover {
+      color: white;
+    }
+    
+    .btn-add-new {
+      background-color: white;
+      color: var(--primary);
+      border: 1px solid rgba(58, 110, 165, 0.2);
+    }
+    
+    .btn-home {
+      background-color: white;
+      color: var(--dark);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .footer {
+      background-color: #ffffff;
+      color: var(--dark);
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 3rem;
+      border-radius: 15px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/index">TUPIKE</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/index#myfavorites">
+              <i class="fas fa-heart"></i>Favorites
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/index#myrecipes">
+              <i class="fas fa-book"></i>My Recipes
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/search">
+              <i class="fas fa-search"></i>Search
+            </a>
+          </li>
+        </ul>
+        <form class="form-inline mr-3" action="/search" method="GET">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search recipes..." name="query" style="border-radius: 20px 0 0 20px;">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit" style="border-radius: 0 20px 20px 0; background-color: var(--primary); border-color: var(--primary);">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
           </div>
+        </form>
+        <div class="d-flex">
+          <a href="/profile" class="nav-link">
+            <i class="fas fa-user"></i>My Profile
+          </a>
+          <a href="/logout" class="nav-link">
+            <i class="fas fa-sign-out-alt"></i>Logout
+          </a>
         </div>
-
-        <div class="col-content">
-          <h2>Number Of Servings</h2>
-          <h3><%= recipe.servings %></h3>
-        </div>
-
-        <div class="col-content">
-          <h2>Description</h2>
-          <ol><%= recipe.description %></ol>
-        </div>
-
-        <div class="col-content">
-          <h2>Ingredients</h2>
-          <ul>
-            <% for (let i = 0; i < recipe.ingredients.length; i++) { %>
-            <li>
-              <%= recipe.ingredients[i].name %>
-            </li>
-            <% } %>
-          </ul>
-        </div>
-
-        <div class="col-content">
-          <h2>Cooking Procedure</h2>
-          <ol>
-            <% for (let i = 0; i < recipe.cooking_procedures.length; i++) {
-            %>
-            <li><%= recipe.cooking_procedures[i].description %></li>
-            <% } %>
-            </ol>
-        </div>
-      </div>
-    </section>
-
-    <div class="add">
-      <div class="add-content">
-        <% if (recipe && recipe.id) { %>
-          <h2>
-            <a href="/editrecipe/<%= recipe.id %>" class="btn btn-primary">Edit This Recipe</a>
-          </h2>                    
-        <% } %>
-      </div>
-      <div class="add-content">
-        <h2>
-          <a href="/newrecipe" class="btn btn-primary">Add Another Recipe</a>
-        </h2>
-      </div>
-      <div class="add-content">
-        <h2>
-          <a href="/index" class="btn btn-primary">Done</a>
-        </h2>
       </div>
     </div>
+  </nav>
+  
+  <div class="container">
+    <div class="confirmation-card">
+      <div class="confirmation-header">
+        <div class="status-icon" id="status-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <h2 class="confirmation-title" id="confirmation-title">Recipe Preview</h2>
+        <p class="confirmation-subtitle" id="confirmation-text">
+          Your recipe is ready to be saved. Please review the details below and confirm.
+        </p>
+      </div>
+      
+      <div class="recipe-details">
+        <div class="recipe-text">
+          <h3 class="recipe-title"><%= recipe.title %></h3>
+          
+          <div class="detail-section">
+            <h4 class="detail-heading">Description</h4>
+            <p><%= recipe.description %></p>
+          </div>
+          
+          <div class="detail-section">
+            <h4 class="detail-heading">Ingredients</h4>
+            <ul class="ingredient-list">
+              <% recipe.ingredients.forEach(ingredient => { %>
+                <li><%= ingredient.name %></li>
+              <% }); %>
+            </ul>
+          </div>
+          
+          <div class="detail-section">
+            <h4 class="detail-heading">Cooking Procedure</h4>
+            <ol class="procedure-list">
+              <% recipe.cooking_procedures.forEach(step => { %>
+                <li><%= step.description %></li>
+              <% }); %>
+            </ol>
+          </div>
+        </div>
+        
+        <% if (recipe.imageFilename) { %>
+          <div class="recipe-image-container">
+            <img src="/images/<%= recipe.imageFilename %>" alt="Recipe Image" class="recipe-image">
+          </div>
+        <% } %>
+      </div>
+      
+      <div class="actions-container">
+        <!-- Save button (only visible before saving) -->
+        <button id="save-recipe" class="btn btn-action btn-save">
+          <i class="fas fa-save"></i>Save Recipe
+        </button>
 
-    <footer class="footer mt-5">
-      <p>&copy; 2023 Recipe App. All rights reserved.</p>
-    </footer>
+        <!-- Edit Recipe button -->
+        <a href="/editrecipe/<%= recipe.id %>" class="btn btn-action btn-edit">
+          <i class="fas fa-edit"></i>Edit Recipe
+        </a>
 
-    <script type="text/javascript" src="/public/script.js"></script>
-  </body>
+        <a href="/newrecipe" class="btn btn-action btn-add-new">
+          <i class="fas fa-plus-circle"></i>Add Another Recipe
+        </a>
+        
+        <a href="/index" class="btn btn-action btn-home">
+          <i class="fas fa-home"></i>Go to Home
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="mb-0">&copy; 2024 Tupike Recipe Sharing. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Script to handle Save -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('save-recipe').addEventListener('click', function() {
+      fetch('/saverecipe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Update icon, title & text
+          document.getElementById('status-icon').innerHTML = '<i class="fas fa-check-circle"></i>';
+          document.getElementById('confirmation-title').textContent = 'Recipe Saved Successfully';
+          document.getElementById('confirmation-text').textContent = 'Your recipe has been saved to Tupike. You can edit it anytime, add more recipes, or browse your collection.';
+          
+          // Change header background to success color
+          document.querySelector('.confirmation-header').style.background = 'linear-gradient(135deg, #20bf6b 0%, #4cd67b 100%)';
+          
+          // Hide the save button
+          document.getElementById('save-recipe').style.display = 'none';
+        }
+      })
+      .catch(err => {
+        console.error('Error saving recipe:', err);
+        
+        // Show error state
+        document.getElementById('status-icon').innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+        document.getElementById('confirmation-title').textContent = 'Error Saving Recipe';
+        document.getElementById('confirmation-text').textContent = 'An error occurred while saving your recipe. Please try again.';
+        
+        // Change header background to error color
+        document.querySelector('.confirmation-header').style.background = 'linear-gradient(135deg, #e74c3c 0%, #ff6b6b 100%)';
+      });
+    });
+  </script>
+</body>
 </html>
